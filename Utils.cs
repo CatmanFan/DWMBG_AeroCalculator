@@ -2,7 +2,6 @@
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Text;
 using System.Windows.Forms;
 
 namespace DWMBG_AeroCalculator
@@ -49,16 +48,16 @@ namespace DWMBG_AeroCalculator
 
         public static void KillDWM()
         {
-            var procList = Process.GetProcessesByName("dwmblurglass");
+            Process[] procList = Process.GetProcessesByName("dwmblurglass");
 
-            foreach (var proc in procList)
+            foreach (Process proc in procList)
             {
                 proc.Kill();
             }
 
             procList = Process.GetProcessesByName("dwm");
 
-            foreach (var proc in procList)
+            foreach (Process proc in procList)
             {
                 proc.Kill();
             }

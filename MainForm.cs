@@ -1,12 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DWMBG_AeroCalculator
@@ -28,7 +21,7 @@ namespace DWMBG_AeroCalculator
 
         private void SetValues()
         {
-            float t = 26 + (217 * ((float)trackBar1.Value / (float)trackBar1.Maximum));
+            float t = 26 + (217 * (trackBar1.Value / (float)trackBar1.Maximum));
             primary = t < 103 ? 5 : t < 188 ? 0.776471 * t - 74.976471 : t < 189 ? 71 : 0.535714 * t - 31.25;
             secondary = t < 102 ? 0.526316 * t - 8.684211 : t < 189 ? -0.517241 * t + 97.758621 : 0;
             blur = t < 102 ? -0.526316 * t + 103.684211 : t < 188 ? -0.255814 * t + 76.093023 : t < 189 ? 28 : -0.535714 * t + 131.25;
@@ -72,14 +65,14 @@ namespace DWMBG_AeroCalculator
 
             // Write to files
             // *************
-            var newConfig = File.ReadAllLines(Properties.Settings.Default.ConfigFile);
+            string[] newConfig = File.ReadAllLines(Properties.Settings.Default.ConfigFile);
             int modified = 0;
 
             for (int i = 0; i < newConfig.Length; i++)
             {
-                if (newConfig[i].StartsWith("aeroColorBalance"))            { newConfig[i] = $"aeroColorBalance={primary / 100}"; modified++; }
-                else if (newConfig[i].StartsWith("aeroAfterglowBalance"))   { newConfig[i] = $"aeroAfterglowBalance={secondary / 100}"; modified++; }
-                else if (newConfig[i].StartsWith("aeroBlurBalance"))        { newConfig[i] = $"aeroBlurBalance={blur / 100}"; modified++; }
+                if (newConfig[i].StartsWith("aeroColorBalance")) { newConfig[i] = $"aeroColorBalance={primary / 100}"; modified++; }
+                else if (newConfig[i].StartsWith("aeroAfterglowBalance")) { newConfig[i] = $"aeroAfterglowBalance={secondary / 100}"; modified++; }
+                else if (newConfig[i].StartsWith("aeroBlurBalance")) { newConfig[i] = $"aeroBlurBalance={blur / 100}"; modified++; }
             }
 
             if (modified < 3)
@@ -90,7 +83,7 @@ namespace DWMBG_AeroCalculator
             {
                 using (StreamWriter sw = new StreamWriter(Properties.Settings.Default.ConfigFile))
                 {
-                    foreach (var item in newConfig)
+                    foreach (string item in newConfig)
                         sw.WriteLine(item);
                 }
 
