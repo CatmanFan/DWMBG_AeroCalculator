@@ -94,10 +94,13 @@ namespace DWMBG_AeroCalculator
                         sw.WriteLine(item);
                 }
 
-                MessageBox.Show("All values written to config.\nYou may need to uninstall and reinstall DWMBlurGlass from its GUI, or sign off Windows for changes to take effect.");
+                // MessageBox.Show("All values written to config.\nYou may need to uninstall and reinstall DWMBlurGlass from its GUI, or sign off Windows for changes to take effect.");
 
                 Properties.Settings.Default.Opacity = trackBar1.Value;
                 Properties.Settings.Default.Save();
+
+                Utils.StopMHostProcess();
+                Utils.RunMHostProcess();
             }
 
         }
