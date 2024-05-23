@@ -99,8 +99,7 @@ namespace DWMBG_AeroCalculator
                 Properties.Settings.Default.Opacity = trackBar1.Value;
                 Properties.Settings.Default.Save();
 
-                Utils.StopMHostProcess();
-                Utils.RunMHostProcess();
+                Utils.RestartDWMBG();
             }
 
         }

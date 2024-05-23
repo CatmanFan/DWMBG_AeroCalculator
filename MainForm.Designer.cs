@@ -85,7 +85,7 @@ namespace DWMBG_AeroCalculator
             this.openFileDialog.SupportMultiDottedExtensions = true;
             this.openFileDialog.Title = "Select a valid DWMBG configuration file...";
             // 
-            // Form1
+            // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
@@ -96,8 +96,10 @@ namespace DWMBG_AeroCalculator
             this.Controls.Add(this.label1);
             this.Controls.Add(this.trackBar1);
             this.Font = new System.Drawing.Font("Tahoma", 8F);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Name = "Form1";
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Aero intensity calculator for DWMBlurGlass";
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();

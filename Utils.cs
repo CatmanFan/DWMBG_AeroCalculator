@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Windows.Forms;
 
 namespace DWMBG_AeroCalculator
 {
@@ -14,9 +16,6 @@ namespace DWMBG_AeroCalculator
         [DllImport("kernel32.dll", SetLastError = true)]
         [return: MarshalAs(UnmanagedType.Bool)]
         static extern bool CloseHandle(IntPtr hObject);
-
-        [DllImport("kernel32.dll", CharSet = CharSet.Unicode)]
-        private static extern bool CreateProcessW(string lpApplicationName, string lpCommandLine, IntPtr lpProcessAttributes, IntPtr lpThreadAttributes, bool bInheritHandles, uint dwCreationFlags, IntPtr lpEnvironment, string lpCurrentDirectory, [In] ref STARTUPINFO lpStartupInfo, out PROCESS_INFORMATION lpProcessInformation);
 
         [DllImport("kernel32.dll")]
         private static extern uint GetProcessId(string processName);
@@ -32,71 +31,36 @@ namespace DWMBG_AeroCalculator
 
         public static string GetCurrentDir() => Environment.CurrentDirectory;
 
-        private struct STARTUPINFO
-        {
-            public int cb;
-            public string lpReserved;
-            public string lpDesktop;
-            public string lpTitle;
-            public uint dwX;
-            public uint dwY;
-            public uint dwXSize;
-            public uint dwYSize;
-            public uint dwXCountChars;
-            public uint dwYCountChars;
-            public uint dwFillAttribute;
-            public uint dwFlags;
-            public short wShowWindow;
-            public short cbReserved2;
-            public IntPtr lpReserved2;
-            public IntPtr hStdInput;
-            public IntPtr hStdOutput;
-            public IntPtr hStdError;
-        }
+        public static string DWMBGApp { get => Path.GetDirectoryName(Properties.Settings.Default.ConfigFile).Replace("\\data", "\\DWMBlurGlass.exe"); }
 
-        private struct PROCESS_INFORMATION
+        public static void RestartDWMBG()
         {
-            public IntPtr hProcess;
-            public IntPtr hThread;
-            public uint dwProcessId;
-            public uint dwThreadId;
+            if (MessageBox.Show("All values written to config.\nRestart DWM?", "Notice", MessageBoxButtons.YesNo) == DialogResult.Yes)
+            {
+                KillDWM();
+                RunDWMBG();
+            }
         }
-
-        public static string DWMBGApp { get => System.IO.Path.GetDirectoryName(Properties.Settings.Default.ConfigFile).Replace("\\data", "\\DWMBlurGlass.exe"); }
 
         public static void RunDWMBG()
         {
             Process.Start(DWMBGApp, "runhost");
         }
 
-        public static void RunMHostProcess()
+        public static void KillDWM()
         {
-            STARTUPINFO startupInfo = new STARTUPINFO();
-            PROCESS_INFORMATION processInformation = new PROCESS_INFORMATION();
+            var procList = Process.GetProcessesByName("dwmblurglass");
 
-            string param = " runhost";
-            if (CreateProcessW(DWMBGApp, param, IntPtr.Zero, IntPtr.Zero, false, 0, IntPtr.Zero, null, ref startupInfo, out processInformation))
+            foreach (var proc in procList)
             {
-                CloseHandle(processInformation.hProcess);
-                CloseHandle(processInformation.hThread);
+                proc.Kill();
             }
-        }
 
-        public static void StopMHostProcess()
-        {
-            foreach (var proc in Process.GetProcessesByName("dwmblurglass"))
+            procList = Process.GetProcessesByName("dwm");
+
+            foreach (var proc in procList)
             {
-                uint pid = Convert.ToUInt32(proc.Id);
-
-                if (pid != 0)
-                {
-                    IntPtr hProcess = OpenProcess(0x1F0FFF, false, pid);
-                    if (hProcess != IntPtr.Zero)
-                    {
-                        TerminateProcess(hProcess, 0);
-                        CloseHandle(hProcess);
-                    }
-                }
+                proc.Kill();
             }
         }
     }
