@@ -12,55 +12,26 @@ namespace DWMBG_AeroCalculator
 
     public static class Utils
     {
-        [DllImport("kernel32.dll", SetLastError = true)]
-        [return: MarshalAs(UnmanagedType.Bool)]
-        static extern bool CloseHandle(IntPtr hObject);
-
-        [DllImport("kernel32.dll")]
-        private static extern uint GetProcessId(string processName);
-
-        [DllImport("kernel32.dll", ExactSpelling = true)]
-        private static extern IntPtr OpenProcess(int dwDesiredAccess, bool bInheritHandle, uint dwProcessId);
-
-        [DllImport("kernel32.dll", ExactSpelling = true)]
-        private static extern bool TerminateProcess(IntPtr hProcess, uint uExitCode);
+        private const uint WM_DWMCOLORIZATIONCOLORCHANGED = 0x320;
+        private const uint WM_DWMCOMPOSITIONCHANGED = 0x31E;
+        private const uint WM_THEMECHANGED = 0x31A;
 
         [DllImport("user32.dll", CharSet = CharSet.Unicode)]
-        private static extern IntPtr SendMessageW(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
+        static extern IntPtr FindWindowW(string lpClassName, string lpWindowName);
 
-        public static string GetCurrentDir() => Environment.CurrentDirectory;
+        [DllImport("user32.dll")]
+        static extern bool PostMessageW(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
-        public static string DWMBGApp { get => Path.GetDirectoryName(Properties.Settings.Default.ConfigFile).Replace("\\data", "\\DWMBlurGlass.exe"); }
-
-        public static void RestartDWMBG()
+        public static void RefreshDWM()
         {
-            if (MessageBox.Show("All values written to config.\nRestart DWM?", "Notice", MessageBoxButtons.YesNo) == DialogResult.Yes)
-            {
-                KillDWM();
-                RunDWMBG();
-            }
-        }
-
-        public static void RunDWMBG()
-        {
-            Process.Start(DWMBGApp, "runhost");
-        }
-
-        public static void KillDWM()
-        {
-            Process[] procList = Process.GetProcessesByName("dwmblurglass");
-
-            foreach (Process proc in procList)
-            {
+            foreach (var proc in Process.GetProcessesByName("dwmblurglass"))
                 proc.Kill();
-            }
 
-            procList = Process.GetProcessesByName("dwm");
+            IntPtr hWnd = FindWindowW("Dwm", null);
 
-            foreach (Process proc in procList)
-            {
-                proc.Kill();
-            }
+            if (hWnd != IntPtr.Zero)
+                foreach (var status in new uint[] { WM_THEMECHANGED, WM_DWMCOMPOSITIONCHANGED, WM_DWMCOLORIZATIONCOLORCHANGED })
+                    PostMessageW(hWnd, status, IntPtr.Zero, IntPtr.Zero);
         }
     }
 }

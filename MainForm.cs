@@ -48,7 +48,7 @@ namespace DWMBG_AeroCalculator
         }
 
         private string ToString(double input) => Convert.ToDecimal(input).ToString("0.###");
-        private string ToConfigData(double input) => Convert.ToDecimal(input / 100).ToString("0.000") + "000";
+        private string ToConfigData(double input) => Convert.ToDecimal(input).ToString("0.000") + "000";
 
         private void SetText() => label2.Text = $"{ToString(primary)}\n{ToString(secondary)}\n{ToString(blur)}";
 
@@ -82,22 +82,20 @@ namespace DWMBG_AeroCalculator
             {
                 MessageBox.Show("Failed to modify all Aero blur values.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
+
             else
             {
                 using (StreamWriter sw = new StreamWriter(Properties.Settings.Default.ConfigFile))
-                {
                     foreach (string item in newConfig)
                         sw.WriteLine(item);
-                }
 
                 // MessageBox.Show("All values written to config.\nYou may need to uninstall and reinstall DWMBlurGlass from its GUI, or sign off Windows for changes to take effect.");
 
                 Properties.Settings.Default.Opacity = trackBar1.Value;
                 Properties.Settings.Default.Save();
 
-                Utils.RestartDWMBG();
+                Utils.RefreshDWM();
             }
-
         }
     }
 }
