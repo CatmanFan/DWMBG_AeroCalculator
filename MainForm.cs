@@ -47,7 +47,10 @@ namespace DWMBG_AeroCalculator
             return valid;
         }
 
-        private void SetText() => label2.Text = $"{(primary > 0 ? primary.ToString("#.000") : "0.000")}\n{(secondary > 0 ? secondary.ToString("#.000") : "0.000")}\n{(blur > 0 ? blur.ToString("#.000") : "0.000")}";
+        private string ToString(double input) => Convert.ToDecimal(input).ToString("0.###");
+        private string ToConfigData(double input) => Convert.ToDecimal(input / 100).ToString("0.000") + "000";
+
+        private void SetText() => label2.Text = $"{ToString(primary)}\n{ToString(secondary)}\n{ToString(blur)}";
 
         private void WriteToConfig_Click(object sender, EventArgs e)
         {
@@ -70,9 +73,9 @@ namespace DWMBG_AeroCalculator
 
             for (int i = 0; i < newConfig.Length; i++)
             {
-                if (newConfig[i].StartsWith("aeroColorBalance")) { newConfig[i] = $"aeroColorBalance={primary / 100}"; modified++; }
-                else if (newConfig[i].StartsWith("aeroAfterglowBalance")) { newConfig[i] = $"aeroAfterglowBalance={secondary / 100}"; modified++; }
-                else if (newConfig[i].StartsWith("aeroBlurBalance")) { newConfig[i] = $"aeroBlurBalance={blur / 100}"; modified++; }
+                if (newConfig[i].StartsWith("aeroColorBalance")) { newConfig[i] = $"aeroColorBalance={ToConfigData(primary / 100)}"; modified++; }
+                else if (newConfig[i].StartsWith("aeroAfterglowBalance")) { newConfig[i] = $"aeroAfterglowBalance={ToConfigData(secondary / 100)}"; modified++; }
+                else if (newConfig[i].StartsWith("aeroBlurBalance")) { newConfig[i] = $"aeroBlurBalance={ToConfigData(blur / 100)}"; modified++; }
             }
 
             if (modified < 3)
