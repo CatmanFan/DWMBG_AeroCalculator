@@ -35,15 +35,17 @@ namespace DWMBG_AeroCalculator
             this.label2 = new System.Windows.Forms.Label();
             this.WriteToConfig = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.panel1 = new System.Windows.Forms.Panel();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // trackBar1
             // 
-            this.trackBar1.Location = new System.Drawing.Point(12, 12);
+            this.trackBar1.Location = new System.Drawing.Point(12, 10);
             this.trackBar1.Maximum = 100;
             this.trackBar1.Name = "trackBar1";
-            this.trackBar1.Size = new System.Drawing.Size(466, 45);
+            this.trackBar1.Size = new System.Drawing.Size(460, 45);
             this.trackBar1.TabIndex = 0;
             this.trackBar1.TickFrequency = 5;
             this.trackBar1.Scroll += new System.EventHandler(this.trackBar1_Scroll);
@@ -53,7 +55,7 @@ namespace DWMBG_AeroCalculator
             // 
             this.label1.AutoSize = true;
             this.label1.Font = new System.Drawing.Font("Tahoma", 9F);
-            this.label1.Location = new System.Drawing.Point(12, 60);
+            this.label1.Location = new System.Drawing.Point(9, 51);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(113, 42);
             this.label1.TabIndex = 1;
@@ -63,7 +65,7 @@ namespace DWMBG_AeroCalculator
             // 
             this.label2.AutoSize = true;
             this.label2.Font = new System.Drawing.Font("Tahoma", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label2.Location = new System.Drawing.Point(131, 60);
+            this.label2.Location = new System.Drawing.Point(128, 51);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(43, 14);
             this.label2.TabIndex = 2;
@@ -71,7 +73,7 @@ namespace DWMBG_AeroCalculator
             // 
             // WriteToConfig
             // 
-            this.WriteToConfig.Location = new System.Drawing.Point(352, 116);
+            this.WriteToConfig.Location = new System.Drawing.Point(350, 10);
             this.WriteToConfig.Name = "WriteToConfig";
             this.WriteToConfig.Size = new System.Drawing.Size(122, 23);
             this.WriteToConfig.TabIndex = 3;
@@ -86,16 +88,26 @@ namespace DWMBG_AeroCalculator
             this.openFileDialog.SupportMultiDottedExtensions = true;
             this.openFileDialog.Title = "Select a valid DWMBG configuration file...";
             // 
+            // panel1
+            // 
+            this.panel1.BackColor = System.Drawing.SystemColors.Control;
+            this.panel1.Controls.Add(this.WriteToConfig);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel1.Location = new System.Drawing.Point(0, 107);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(484, 45);
+            this.panel1.TabIndex = 5;
+            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
-            this.BackColor = System.Drawing.Color.WhiteSmoke;
-            this.ClientSize = new System.Drawing.Size(486, 151);
-            this.Controls.Add(this.WriteToConfig);
+            this.BackColor = System.Drawing.Color.White;
+            this.ClientSize = new System.Drawing.Size(484, 152);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.trackBar1);
+            this.Controls.Add(this.panel1);
             this.Font = new System.Drawing.Font("Tahoma", 8F);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
@@ -104,6 +116,7 @@ namespace DWMBG_AeroCalculator
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Aero intensity calculator for DWMBlurGlass";
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -116,6 +129,7 @@ namespace DWMBG_AeroCalculator
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button WriteToConfig;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
+        private System.Windows.Forms.Panel panel1;
     }
 }
 
