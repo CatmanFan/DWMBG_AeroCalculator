@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
 
@@ -15,6 +16,7 @@ namespace DWMBG_AeroCalculator
             InitializeComponent();
             trackBar1.Value = Properties.Settings.Default.Opacity;
             SetValues();
+            CultureInfo.CurrentUICulture = CultureInfo.CurrentCulture = new CultureInfo("en") { NumberFormat = new NumberFormatInfo() { NumberDecimalSeparator = ".", CurrencyDecimalSeparator = "." } };
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e) => SetValues();
@@ -47,8 +49,8 @@ namespace DWMBG_AeroCalculator
             return valid;
         }
 
-        private string ToString(double input) => Convert.ToDecimal(input).ToString("0.###");
-        private string ToConfigData(double input) => Convert.ToDecimal(input).ToString("0.000") + "000";
+        private string ToString(double input) => Convert.ToDecimal(input).ToString("0.###").Replace(',', '.').Replace(' ', '.');
+        private string ToConfigData(double input) => (Convert.ToDecimal(input).ToString("0.000") + "000").Replace(',', '.').Replace(' ', '.');
 
         private void SetText() => label2.Text = $"{ToString(primary)}\n{ToString(secondary)}\n{ToString(blur)}";
 
