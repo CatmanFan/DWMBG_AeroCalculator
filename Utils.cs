@@ -104,6 +104,9 @@ namespace DWMBG_AeroCalculator
                 System.Threading.Thread.Sleep(500);
                 dwmbg.Dispose();
             }
+
+            System.Threading.Thread.Sleep(100);
+            RefreshDWM();
         }
     }
 }
