@@ -12,6 +12,8 @@ namespace DWMBG_AeroCalculator
         double secondary;
         double blur;
 
+        bool shownNotice = false;
+
         public MainForm()
         {
             InitializeComponent();
@@ -118,6 +120,22 @@ namespace DWMBG_AeroCalculator
             Properties.Settings.Default.RefreshDWM = RefreshDWM.SelectedIndex;
             Properties.Settings.Default.Save();
             SetValues();
+        }
+
+        private void openDwmBgMenuItem_Click(object sender, EventArgs e) => Utils.OpenDWMBG();
+        private void openAppMenuItem_Click(object sender, EventArgs e) { Show(); Activate(); /* notifyIcon.Visible = false; */ }
+        private void exitAppMenuItem_Click(object sender, EventArgs e) => Application.Exit();
+
+        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (e.CloseReason == CloseReason.UserClosing && sender == this)
+            {
+                e.Cancel = true;
+                Hide();
+
+                // notifyIcon.Visible = true;
+                if (!shownNotice) { notifyIcon.ShowBalloonTip(10000, "Minimized to taskbar", "You can exit the application by right-clicking this icon and selecting Exit from the menu.", ToolTipIcon.None); shownNotice = true; }
+            }
         }
     }
 }

@@ -37,14 +37,21 @@ namespace DWMBG_AeroCalculator
             this.WriteToConfig = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.panel1 = new System.Windows.Forms.Panel();
-            this.label3 = new System.Windows.Forms.Label();
-            this.RefreshDWM = new System.Windows.Forms.ComboBox();
             this.WarningIcon = new System.Windows.Forms.PictureBox();
+            this.RefreshDWM = new System.Windows.Forms.ComboBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
+            this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.openDwmBgMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openAppMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.separator = new System.Windows.Forms.ToolStripSeparator();
+            this.exitAppMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.WarningIcon)).BeginInit();
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // trackBar1
@@ -108,14 +115,15 @@ namespace DWMBG_AeroCalculator
             this.panel1.Size = new System.Drawing.Size(484, 60);
             this.panel1.TabIndex = 5;
             // 
-            // label3
+            // WarningIcon
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 9);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(196, 13);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "DWM behaviour when writing to config:";
+            this.WarningIcon.Location = new System.Drawing.Point(195, 27);
+            this.WarningIcon.Name = "WarningIcon";
+            this.WarningIcon.Size = new System.Drawing.Size(21, 21);
+            this.WarningIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.WarningIcon.TabIndex = 7;
+            this.WarningIcon.TabStop = false;
+            this.WarningIcon.Visible = false;
             // 
             // RefreshDWM
             // 
@@ -131,15 +139,14 @@ namespace DWMBG_AeroCalculator
             this.RefreshDWM.TabIndex = 6;
             this.RefreshDWM.SelectedIndexChanged += new System.EventHandler(this.RefreshDWM_CheckedChanged);
             // 
-            // WarningIcon
+            // label3
             // 
-            this.WarningIcon.Location = new System.Drawing.Point(195, 27);
-            this.WarningIcon.Name = "WarningIcon";
-            this.WarningIcon.Size = new System.Drawing.Size(21, 21);
-            this.WarningIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.WarningIcon.TabIndex = 7;
-            this.WarningIcon.TabStop = false;
-            this.WarningIcon.Visible = false;
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(12, 9);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(196, 13);
+            this.label3.TabIndex = 5;
+            this.label3.Text = "DWM behaviour when writing to config:";
             // 
             // panel2
             // 
@@ -153,6 +160,49 @@ namespace DWMBG_AeroCalculator
             // toolTip
             // 
             this.toolTip.IsBalloon = true;
+            // 
+            // notifyIcon
+            // 
+            this.notifyIcon.ContextMenuStrip = this.contextMenuStrip;
+            this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
+            this.notifyIcon.Text = "Aero intensity calculator for DWMBlurGlass";
+            this.notifyIcon.Visible = true;
+            // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.openDwmBgMenuItem,
+            this.openAppMenuItem,
+            this.separator,
+            this.exitAppMenuItem});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(235, 76);
+            // 
+            // openDwmBgMenuItem
+            // 
+            this.openDwmBgMenuItem.Name = "openDwmBgMenuItem";
+            this.openDwmBgMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.openDwmBgMenuItem.Text = "Open DWMBlurGlass";
+            this.openDwmBgMenuItem.Click += new System.EventHandler(this.openDwmBgMenuItem_Click);
+            // 
+            // openAppMenuItem
+            // 
+            this.openAppMenuItem.Name = "openAppMenuItem";
+            this.openAppMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.openAppMenuItem.Text = "Open Aero intensity calculator";
+            this.openAppMenuItem.Click += new System.EventHandler(this.openAppMenuItem_Click);
+            // 
+            // separator
+            // 
+            this.separator.Name = "separator";
+            this.separator.Size = new System.Drawing.Size(231, 6);
+            // 
+            // exitAppMenuItem
+            // 
+            this.exitAppMenuItem.Name = "exitAppMenuItem";
+            this.exitAppMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.exitAppMenuItem.Text = "Exit";
+            this.exitAppMenuItem.Click += new System.EventHandler(this.exitAppMenuItem_Click);
             // 
             // MainForm
             // 
@@ -172,10 +222,12 @@ namespace DWMBG_AeroCalculator
             this.Name = "MainForm";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Aero intensity calculator for DWMBlurGlass";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.WarningIcon)).EndInit();
+            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -194,6 +246,12 @@ namespace DWMBG_AeroCalculator
         private System.Windows.Forms.PictureBox WarningIcon;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.ToolTip toolTip;
+        private System.Windows.Forms.NotifyIcon notifyIcon;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem openDwmBgMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openAppMenuItem;
+        private System.Windows.Forms.ToolStripSeparator separator;
+        private System.Windows.Forms.ToolStripMenuItem exitAppMenuItem;
     }
 }
 

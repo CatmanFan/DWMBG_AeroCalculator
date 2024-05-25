@@ -24,7 +24,26 @@ namespace DWMBG_AeroCalculator
         [DllImport("user32.dll")]
         static extern bool PostMessageW(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
+        [DllImport("user32.dll")]
+        public static extern int SetForegroundWindow(IntPtr hWnd);
+
         private static string DWMBGApp { get => Path.GetDirectoryName(Properties.Settings.Default.ConfigFile).Replace("\\data", "\\DWMBlurGlass.exe"); }
+
+        public static void OpenDWMBG()
+        {
+            foreach (Process proc in Process.GetProcessesByName("dwmblurglass"))
+            {
+                if (proc.MainWindowHandle != IntPtr.Zero)
+                {
+                    SetForegroundWindow(proc.MainWindowHandle);
+                    return;
+                }
+            }
+
+            var dwmbg = new Process();
+            dwmbg.StartInfo.FileName = DWMBGApp;
+            dwmbg.Start();
+        }
 
         public static void RefreshDWM()
         {
@@ -49,7 +68,7 @@ namespace DWMBG_AeroCalculator
             foreach (Process proc in Process.GetProcessesByName("dwm"))
                 proc.Kill();
 
-            System.Threading.Thread.Sleep(1250);
+            System.Threading.Thread.Sleep(800);
 
             string windhawk = "SOFTWARE\\Windhawk\\Engine\\Mods\\";
             string[] mods = new string[]
@@ -75,7 +94,7 @@ namespace DWMBG_AeroCalculator
 
                 Found:
                 regKey.SetValue("Disabled", 1, RegistryValueKind.DWord);
-                System.Threading.Thread.Sleep(500);
+                System.Threading.Thread.Sleep(400);
                 regKey.SetValue("Disabled", 0, RegistryValueKind.DWord);
                 goto DWMBG_Restart;
 
@@ -105,8 +124,11 @@ namespace DWMBG_AeroCalculator
                 dwmbg.Dispose();
             }
 
-            System.Threading.Thread.Sleep(100);
-            RefreshDWM();
+            for (int i = 0; i < 4; i++)
+            {
+                System.Threading.Thread.Sleep(100);
+                RefreshDWM();
+            }
         }
     }
 }
