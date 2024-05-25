@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Globalization;
 using System.IO;
 using System.Windows.Forms;
@@ -14,9 +15,18 @@ namespace DWMBG_AeroCalculator
         public MainForm()
         {
             InitializeComponent();
-            trackBar1.Value = Properties.Settings.Default.Opacity;
-            SetValues();
             CultureInfo.CurrentUICulture = CultureInfo.CurrentCulture = new CultureInfo("en") { NumberFormat = new NumberFormatInfo() { NumberDecimalSeparator = ".", CurrencyDecimalSeparator = "." } };
+
+            trackBar1.Value = Properties.Settings.Default.Opacity;
+            RefreshDWM.SelectedIndex = Properties.Settings.Default.RefreshDWM;
+            SetValues();
+
+            WarningIcon.Image = new Icon(SystemIcons.Warning, 16, 16).ToBitmap();
+            toolTip.SetToolTip(WarningIcon, "By killing DWM, the following will also automatically be done by this program:\n" +
+                                            "• Restarting DWMBlurGlass.\n" +
+                                            "• Disabling and re-enabling of affected Windhawk mod(s) which modify window caption" +
+                                            "\n   buttons (these stop working when DWM is restarted).\n\n" +
+                                            "Some affected applications may need to be restarted manually.");
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e) => SetValues();
@@ -28,6 +38,8 @@ namespace DWMBG_AeroCalculator
             secondary = t < 102 ? 0.526316 * t - 8.684211 : t < 189 ? -0.517241 * t + 97.758621 : 0;
             blur = t < 102 ? -0.526316 * t + 103.684211 : t < 188 ? -0.255814 * t + 76.093023 : t < 189 ? 28 : -0.535714 * t + 131.25;
             SetText();
+
+            WarningIcon.Visible = RefreshDWM.SelectedIndex == 2;
         }
 
         private bool CheckValidity(string path)
@@ -96,8 +108,16 @@ namespace DWMBG_AeroCalculator
                 Properties.Settings.Default.Opacity = trackBar1.Value;
                 Properties.Settings.Default.Save();
 
-                Utils.RefreshDWM();
+                if (RefreshDWM.SelectedIndex == 1) Utils.RefreshDWM();
+                else if (RefreshDWM.SelectedIndex == 2) Utils.KillDWM();
             }
+        }
+
+        private void RefreshDWM_CheckedChanged(object sender, EventArgs e)
+        {
+            Properties.Settings.Default.RefreshDWM = RefreshDWM.SelectedIndex;
+            Properties.Settings.Default.Save();
+            SetValues();
         }
     }
 }

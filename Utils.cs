@@ -1,8 +1,10 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Windows.Forms;
+using System.Threading.Tasks;
 
 namespace DWMBG_AeroCalculator
 {
@@ -22,16 +24,86 @@ namespace DWMBG_AeroCalculator
         [DllImport("user32.dll")]
         static extern bool PostMessageW(IntPtr hWnd, uint Msg, IntPtr wParam, IntPtr lParam);
 
+        private static string DWMBGApp { get => Path.GetDirectoryName(Properties.Settings.Default.ConfigFile).Replace("\\data", "\\DWMBlurGlass.exe"); }
+
         public static void RefreshDWM()
         {
-            foreach (var proc in Process.GetProcessesByName("dwmblurglass"))
+            foreach (Process proc in Process.GetProcessesByName("dwmblurglass"))
                 proc.Kill();
 
-            IntPtr hWnd = FindWindowW("Dwm", null);
+            List<IntPtr> hWnd = new List<IntPtr>() { FindWindowW("Dwm", null) };
+            foreach (Process item in Process.GetProcessesByName("dwm"))
+            {
+                hWnd.Add(item.Handle);
+                hWnd.Add(item.MainWindowHandle);
+            }
+            hWnd.RemoveAll(x => x == IntPtr.Zero);
 
-            if (hWnd != IntPtr.Zero)
-                foreach (var status in new uint[] { WM_THEMECHANGED, WM_DWMCOMPOSITIONCHANGED, WM_DWMCOLORIZATIONCOLORCHANGED })
-                    PostMessageW(hWnd, status, IntPtr.Zero, IntPtr.Zero);
+            for (int i = 0; i < hWnd.Count; i++)
+                foreach (uint status in new uint[] { WM_THEMECHANGED, WM_DWMCOMPOSITIONCHANGED, WM_DWMCOLORIZATIONCOLORCHANGED })
+                    PostMessageW(hWnd[i], status, IntPtr.Zero, IntPtr.Zero);
+        }
+
+        public static void KillDWM()
+        {
+            foreach (Process proc in Process.GetProcessesByName("dwm"))
+                proc.Kill();
+
+            System.Threading.Thread.Sleep(1250);
+
+            string windhawk = "SOFTWARE\\Windhawk\\Engine\\Mods\\";
+            string[] mods = new string[]
+            {
+                "local@restore-vista-caption-buttons",
+                "local@restore-seven-caption-buttons",
+                "local@restore-eight-caption-buttons",
+                "local@restore-vista-caption-buttons-fork",
+                "local@restore-seven-caption-buttons-fork",
+                "local@restore-eight-caption-buttons-fork",
+                "restore-vista-caption-buttons",
+                "restore-seven-caption-buttons",
+                "restore-eight-caption-buttons",
+                "restore-vista-caption-buttons-fork",
+                "restore-seven-caption-buttons-fork",
+                "restore-eight-caption-buttons-fork",
+            };
+
+            foreach (string mod in mods)
+            {
+                RegistryKey regKey = null;
+                goto Search;
+
+                Found:
+                regKey.SetValue("Disabled", 1, RegistryValueKind.DWord);
+                System.Threading.Thread.Sleep(500);
+                regKey.SetValue("Disabled", 0, RegistryValueKind.DWord);
+                goto DWMBG_Restart;
+
+                Search:
+                using (RegistryKey hklm = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64))
+                {
+                    regKey = hklm.OpenSubKey(windhawk + mod, true);
+                    if (regKey != null && (int)regKey.GetValue("Disabled") == 0) goto Found;
+                }
+
+                using (RegistryKey hkcu = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Registry64))
+                {
+                    regKey = hkcu.OpenSubKey(windhawk + mod, true);
+                    if (regKey != null && (int)regKey.GetValue("Disabled") == 0) goto Found;
+                }
+            }
+
+            DWMBG_Restart:
+            foreach (string argument in new string[] { "runhost", " runhost" })
+            {
+                var dwmbg = new Process();
+                dwmbg.StartInfo.FileName = DWMBGApp;
+                dwmbg.StartInfo.Arguments = argument;
+                dwmbg.StartInfo.Verb = "runas";
+                dwmbg.Start();
+                System.Threading.Thread.Sleep(500);
+                dwmbg.Dispose();
+            }
         }
     }
 }

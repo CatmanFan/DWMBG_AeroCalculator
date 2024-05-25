@@ -46,5 +46,17 @@ namespace DWMBG_AeroCalculator.Properties {
                 this["ConfigFile"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int RefreshDWM {
+            get {
+                return ((int)(this["RefreshDWM"]));
+            }
+            set {
+                this["RefreshDWM"] = value;
+            }
+        }
     }
 }
