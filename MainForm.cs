@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Drawing;
 using System.Globalization;
 using System.IO;
@@ -20,7 +21,10 @@ namespace DWMBG_AeroCalculator
             CultureInfo.CurrentUICulture = CultureInfo.CurrentCulture = new CultureInfo("en") { NumberFormat = new NumberFormatInfo() { NumberDecimalSeparator = ".", CurrencyDecimalSeparator = "." } };
 
             trackBar1.Value = Properties.Settings.Default.Opacity;
-            RefreshDWM.SelectedIndex = Properties.Settings.Default.RefreshDWM;
+            RefreshSIB.Enabled = Registry.CurrentUser.OpenSubKey("SOFTWARE\\StartIsBack", true) != null;
+            if (!RefreshSIB.Enabled) { Properties.Settings.Default.SIB = RefreshSIB.Checked = false; Properties.Settings.Default.Save(); }
+            else { RefreshSIB.Checked = Properties.Settings.Default.SIB; }
+
             SetValues();
 
             WarningIcon.Image = new Icon(SystemIcons.Warning, 16, 16).ToBitmap();
@@ -41,7 +45,7 @@ namespace DWMBG_AeroCalculator
             blur = t < 102 ? -0.526316 * t + 103.684211 : t < 188 ? -0.255814 * t + 76.093023 : t < 189 ? 28 : -0.535714 * t + 131.25;
             SetText();
 
-            WarningIcon.Visible = RefreshDWM.SelectedIndex == 2;
+            KillDWM.Enabled = RefreshDWM.Enabled = Properties.Settings.Default.Opacity == trackBar1.Value;
         }
 
         private bool CheckValidity(string path)
@@ -104,37 +108,39 @@ namespace DWMBG_AeroCalculator
                 using (StreamWriter sw = new StreamWriter(Properties.Settings.Default.ConfigFile))
                     foreach (string item in newConfig)
                         sw.WriteLine(item);
+                if (Properties.Settings.Default.SIB) Utils.RefreshSIB(secondary);
 
                 // MessageBox.Show("All values written to config.\nYou may need to uninstall and reinstall DWMBlurGlass from its GUI, or sign off Windows for changes to take effect.");
 
                 Properties.Settings.Default.Opacity = trackBar1.Value;
                 Properties.Settings.Default.Save();
 
-                if (RefreshDWM.SelectedIndex == 1) Utils.RefreshDWM();
-                else if (RefreshDWM.SelectedIndex == 2) Utils.KillDWM();
+                KillDWM.Enabled = RefreshDWM.Enabled = true;
             }
         }
 
-        private void RefreshDWM_CheckedChanged(object sender, EventArgs e)
-        {
-            Properties.Settings.Default.RefreshDWM = RefreshDWM.SelectedIndex;
-            Properties.Settings.Default.Save();
-            SetValues();
-        }
-
         private void openDwmBgMenuItem_Click(object sender, EventArgs e) => Utils.OpenDWMBG();
-        private void openAppMenuItem_Click(object sender, EventArgs e) { Show(); Activate(); /* notifyIcon.Visible = false; */ }
+        private void openAppMenuItem_Click(object sender, EventArgs e) { Show(); WindowState = FormWindowState.Normal; Activate(); /* notifyIcon.Visible = false; */ }
+        private void notifyIcon_MouseClick(object sender, MouseEventArgs e) { if (e.Button == MouseButtons.Left) { Show(); WindowState = FormWindowState.Normal; Activate(); /* notifyIcon.Visible = false; */ } }
         private void exitAppMenuItem_Click(object sender, EventArgs e) => Application.Exit();
 
-        private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
+        private void KillDWM_Click(object sender, EventArgs e) { Utils.KillDWM(); }
+        private void RefreshDWM_Click(object sender, EventArgs e) { Utils.RefreshDWM(); }
+        private void RefreshSIB_CheckedChanged(object sender, EventArgs e)
         {
-            if (e.CloseReason == CloseReason.UserClosing && sender == this)
+            Properties.Settings.Default.SIB = RefreshSIB.Checked;
+            Properties.Settings.Default.Save();
+        }
+
+        private void MainForm_Resize(object sender, EventArgs e)
+        {
+            if (WindowState == FormWindowState.Minimized)
             {
-                e.Cancel = true;
+                WindowState = FormWindowState.Normal;
                 Hide();
 
                 // notifyIcon.Visible = true;
-                if (!shownNotice) { notifyIcon.ShowBalloonTip(10000, "Minimized to taskbar", "You can exit the application by right-clicking this icon and selecting Exit from the menu.", ToolTipIcon.None); shownNotice = true; }
+                if (!shownNotice) { notifyIcon.ShowBalloonTip(5500, "Minimized to taskbar", "You can exit the application by right-clicking this icon and selecting Exit from the menu.", ToolTipIcon.None); shownNotice = true; }
             }
         }
     }

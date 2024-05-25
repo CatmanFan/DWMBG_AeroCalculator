@@ -45,6 +45,20 @@ namespace DWMBG_AeroCalculator
             dwmbg.Start();
         }
 
+        public static void RefreshSIB(double afterglow)
+        {
+            using (RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\StartIsBack", true))
+            {
+                if (key != null)  // Must check for null key
+                {
+                    uint alpha = Convert.ToUInt32(Math.Round(afterglow / 100 * 254d));
+
+                    key.SetValue("StartMenuAlpha", alpha, RegistryValueKind.DWord);
+                    key.SetValue("TaskbarAlpha", alpha, RegistryValueKind.DWord);
+                }
+            }
+        }
+
         public static void RefreshDWM()
         {
             foreach (Process proc in Process.GetProcessesByName("dwmblurglass"))

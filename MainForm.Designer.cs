@@ -37,9 +37,10 @@ namespace DWMBG_AeroCalculator
             this.WriteToConfig = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.RefreshSIB = new System.Windows.Forms.CheckBox();
+            this.RefreshDWM = new System.Windows.Forms.Button();
+            this.KillDWM = new System.Windows.Forms.Button();
             this.WarningIcon = new System.Windows.Forms.PictureBox();
-            this.RefreshDWM = new System.Windows.Forms.ComboBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.panel2 = new System.Windows.Forms.Panel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
             this.notifyIcon = new System.Windows.Forms.NotifyIcon(this.components);
@@ -87,9 +88,9 @@ namespace DWMBG_AeroCalculator
             // 
             // WriteToConfig
             // 
-            this.WriteToConfig.Location = new System.Drawing.Point(350, 19);
+            this.WriteToConfig.Location = new System.Drawing.Point(12, 8);
             this.WriteToConfig.Name = "WriteToConfig";
-            this.WriteToConfig.Size = new System.Drawing.Size(122, 23);
+            this.WriteToConfig.Size = new System.Drawing.Size(122, 48);
             this.WriteToConfig.TabIndex = 3;
             this.WriteToConfig.Text = "Write to config";
             this.WriteToConfig.UseVisualStyleBackColor = true;
@@ -105,48 +106,56 @@ namespace DWMBG_AeroCalculator
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.Control;
-            this.panel1.Controls.Add(this.WarningIcon);
+            this.panel1.Controls.Add(this.RefreshSIB);
             this.panel1.Controls.Add(this.RefreshDWM);
-            this.panel1.Controls.Add(this.label3);
+            this.panel1.Controls.Add(this.KillDWM);
+            this.panel1.Controls.Add(this.WarningIcon);
             this.panel1.Controls.Add(this.WriteToConfig);
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 107);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(484, 60);
+            this.panel1.Size = new System.Drawing.Size(484, 85);
             this.panel1.TabIndex = 5;
             // 
-            // WarningIcon
+            // RefreshSIB
             // 
-            this.WarningIcon.Location = new System.Drawing.Point(195, 27);
-            this.WarningIcon.Name = "WarningIcon";
-            this.WarningIcon.Size = new System.Drawing.Size(21, 21);
-            this.WarningIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
-            this.WarningIcon.TabIndex = 7;
-            this.WarningIcon.TabStop = false;
-            this.WarningIcon.Visible = false;
+            this.RefreshSIB.AutoSize = true;
+            this.RefreshSIB.Location = new System.Drawing.Point(12, 60);
+            this.RefreshSIB.Name = "RefreshSIB";
+            this.RefreshSIB.Size = new System.Drawing.Size(190, 17);
+            this.RefreshSIB.TabIndex = 11;
+            this.RefreshSIB.Text = "Also change StartIsBack++ colour";
+            this.RefreshSIB.UseVisualStyleBackColor = true;
+            this.RefreshSIB.CheckedChanged += new System.EventHandler(this.RefreshSIB_CheckedChanged);
             // 
             // RefreshDWM
             // 
-            this.RefreshDWM.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.RefreshDWM.FormattingEnabled = true;
-            this.RefreshDWM.Items.AddRange(new object[] {
-            "Do nothing",
-            "Soft refresh",
-            "Hard restart (kill process)"});
-            this.RefreshDWM.Location = new System.Drawing.Point(15, 27);
+            this.RefreshDWM.Location = new System.Drawing.Point(350, 33);
             this.RefreshDWM.Name = "RefreshDWM";
-            this.RefreshDWM.Size = new System.Drawing.Size(174, 21);
-            this.RefreshDWM.TabIndex = 6;
-            this.RefreshDWM.SelectedIndexChanged += new System.EventHandler(this.RefreshDWM_CheckedChanged);
+            this.RefreshDWM.Size = new System.Drawing.Size(122, 23);
+            this.RefreshDWM.TabIndex = 10;
+            this.RefreshDWM.Text = "Refresh DWM";
+            this.RefreshDWM.UseVisualStyleBackColor = true;
+            this.RefreshDWM.Click += new System.EventHandler(this.RefreshDWM_Click);
             // 
-            // label3
+            // KillDWM
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 9);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(196, 13);
-            this.label3.TabIndex = 5;
-            this.label3.Text = "DWM behaviour when writing to config:";
+            this.KillDWM.Location = new System.Drawing.Point(350, 8);
+            this.KillDWM.Name = "KillDWM";
+            this.KillDWM.Size = new System.Drawing.Size(122, 23);
+            this.KillDWM.TabIndex = 9;
+            this.KillDWM.Text = "Kill DWM";
+            this.KillDWM.UseVisualStyleBackColor = true;
+            this.KillDWM.Click += new System.EventHandler(this.KillDWM_Click);
+            // 
+            // WarningIcon
+            // 
+            this.WarningIcon.Location = new System.Drawing.Point(326, 9);
+            this.WarningIcon.Name = "WarningIcon";
+            this.WarningIcon.Size = new System.Drawing.Size(20, 20);
+            this.WarningIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.WarningIcon.TabIndex = 7;
+            this.WarningIcon.TabStop = false;
             // 
             // panel2
             // 
@@ -160,6 +169,7 @@ namespace DWMBG_AeroCalculator
             // toolTip
             // 
             this.toolTip.IsBalloon = true;
+            this.toolTip.ToolTipTitle = "Information";
             // 
             // notifyIcon
             // 
@@ -167,6 +177,7 @@ namespace DWMBG_AeroCalculator
             this.notifyIcon.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon.Icon")));
             this.notifyIcon.Text = "Aero intensity calculator for DWMBlurGlass";
             this.notifyIcon.Visible = true;
+            this.notifyIcon.MouseClick += new System.Windows.Forms.MouseEventHandler(this.notifyIcon_MouseClick);
             // 
             // contextMenuStrip
             // 
@@ -209,7 +220,7 @@ namespace DWMBG_AeroCalculator
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(484, 167);
+            this.ClientSize = new System.Drawing.Size(484, 192);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -220,9 +231,10 @@ namespace DWMBG_AeroCalculator
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
             this.Name = "MainForm";
+            this.SizeGripStyle = System.Windows.Forms.SizeGripStyle.Hide;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Aero intensity calculator for DWMBlurGlass";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainForm_FormClosing);
+            this.Resize += new System.EventHandler(this.MainForm_Resize);
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).EndInit();
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
@@ -241,8 +253,6 @@ namespace DWMBG_AeroCalculator
         private System.Windows.Forms.Button WriteToConfig;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.Label label3;
-        private System.Windows.Forms.ComboBox RefreshDWM;
         private System.Windows.Forms.PictureBox WarningIcon;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.ToolTip toolTip;
@@ -252,6 +262,9 @@ namespace DWMBG_AeroCalculator
         private System.Windows.Forms.ToolStripMenuItem openAppMenuItem;
         private System.Windows.Forms.ToolStripSeparator separator;
         private System.Windows.Forms.ToolStripMenuItem exitAppMenuItem;
+        private System.Windows.Forms.Button KillDWM;
+        private System.Windows.Forms.Button RefreshDWM;
+        private System.Windows.Forms.CheckBox RefreshSIB;
     }
 }
 

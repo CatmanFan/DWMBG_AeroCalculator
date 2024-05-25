@@ -49,13 +49,13 @@ namespace DWMBG_AeroCalculator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int RefreshDWM {
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool SIB {
             get {
-                return ((int)(this["RefreshDWM"]));
+                return ((bool)(this["SIB"]));
             }
             set {
-                this["RefreshDWM"] = value;
+                this["SIB"] = value;
             }
         }
     }
