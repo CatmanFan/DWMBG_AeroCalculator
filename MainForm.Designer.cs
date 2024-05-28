@@ -72,9 +72,9 @@ namespace DWMBG_AeroCalculator
             this.label1.Font = new System.Drawing.Font("Tahoma", 9F);
             this.label1.Location = new System.Drawing.Point(9, 51);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(113, 42);
+            this.label1.Size = new System.Drawing.Size(110, 42);
             this.label1.TabIndex = 1;
-            this.label1.Text = "Primary balance:\r\nSecondary balance:\r\nBlur balance:";
+            this.label1.Text = "Colour balance:\r\nAfterglow balance:\r\nBlur balance:";
             // 
             // label2
             // 
