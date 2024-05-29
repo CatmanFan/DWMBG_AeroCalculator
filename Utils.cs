@@ -45,6 +45,83 @@ namespace DWMBG_AeroCalculator
             dwmbg.Start();
         }
 
+        public static void RestartDWMBG()
+        {
+            foreach (Process proc in Process.GetProcessesByName("dwmblurglass"))
+            {
+                proc.Kill();
+            }
+
+            Start:
+            foreach (string argument in new string[] { "runhost", " runhost" })
+            {
+                var dwmbg = new Process();
+                dwmbg.StartInfo.FileName = DWMBGApp;
+                dwmbg.StartInfo.Arguments = argument;
+                dwmbg.StartInfo.Verb = "runas";
+                dwmbg.Start();
+                System.Threading.Thread.Sleep(500);
+                dwmbg.Dispose();
+            }
+
+            if (Process.GetProcessesByName("dwmblurglass").Length == 0) goto Start;
+
+            RestartWindhawkMods();
+
+            for (int i = 0; i < 4; i++)
+            {
+                System.Threading.Thread.Sleep(100);
+                RefreshDWM();
+            }
+        }
+
+        private static bool RestartWindhawkMods()
+        {
+            string windhawk = "SOFTWARE\\Windhawk\\Engine\\Mods\\";
+            string[] mods = new string[]
+            {
+                "local@restore-vista-caption-buttons",
+                "local@restore-seven-caption-buttons",
+                "local@restore-eight-caption-buttons",
+                "local@restore-vista-caption-buttons-fork",
+                "local@restore-seven-caption-buttons-fork",
+                "local@restore-eight-caption-buttons-fork",
+                "restore-vista-caption-buttons",
+                "restore-seven-caption-buttons",
+                "restore-eight-caption-buttons",
+                "restore-vista-caption-buttons-fork",
+                "restore-seven-caption-buttons-fork",
+                "restore-eight-caption-buttons-fork",
+            };
+
+            foreach (string mod in mods)
+            {
+                RegistryKey regKey = null;
+                goto Search;
+
+                Found:
+                regKey.SetValue("Disabled", 1, RegistryValueKind.DWord);
+                System.Threading.Thread.Sleep(400);
+                regKey.SetValue("Disabled", 0, RegistryValueKind.DWord);
+                return true;
+
+                Search:
+                using (RegistryKey hklm = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64))
+                {
+                    regKey = hklm.OpenSubKey(windhawk + mod, true);
+                    if (regKey != null && (int)regKey.GetValue("Disabled") == 0) goto Found;
+                }
+
+                using (RegistryKey hkcu = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Registry64))
+                {
+                    regKey = hkcu.OpenSubKey(windhawk + mod, true);
+                    if (regKey != null && (int)regKey.GetValue("Disabled") == 0) goto Found;
+                }
+            }
+
+            return false;
+        }
+
         public static void RefreshSIB(double afterglow)
         {
             using (RegistryKey key = Registry.CurrentUser.OpenSubKey("SOFTWARE\\StartIsBack", true))
@@ -84,65 +161,7 @@ namespace DWMBG_AeroCalculator
 
             System.Threading.Thread.Sleep(800);
 
-            string windhawk = "SOFTWARE\\Windhawk\\Engine\\Mods\\";
-            string[] mods = new string[]
-            {
-                "local@restore-vista-caption-buttons",
-                "local@restore-seven-caption-buttons",
-                "local@restore-eight-caption-buttons",
-                "local@restore-vista-caption-buttons-fork",
-                "local@restore-seven-caption-buttons-fork",
-                "local@restore-eight-caption-buttons-fork",
-                "restore-vista-caption-buttons",
-                "restore-seven-caption-buttons",
-                "restore-eight-caption-buttons",
-                "restore-vista-caption-buttons-fork",
-                "restore-seven-caption-buttons-fork",
-                "restore-eight-caption-buttons-fork",
-            };
-
-            foreach (string mod in mods)
-            {
-                RegistryKey regKey = null;
-                goto Search;
-
-                Found:
-                regKey.SetValue("Disabled", 1, RegistryValueKind.DWord);
-                System.Threading.Thread.Sleep(400);
-                regKey.SetValue("Disabled", 0, RegistryValueKind.DWord);
-                goto DWMBG_Restart;
-
-                Search:
-                using (RegistryKey hklm = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64))
-                {
-                    regKey = hklm.OpenSubKey(windhawk + mod, true);
-                    if (regKey != null && (int)regKey.GetValue("Disabled") == 0) goto Found;
-                }
-
-                using (RegistryKey hkcu = RegistryKey.OpenBaseKey(RegistryHive.CurrentUser, RegistryView.Registry64))
-                {
-                    regKey = hkcu.OpenSubKey(windhawk + mod, true);
-                    if (regKey != null && (int)regKey.GetValue("Disabled") == 0) goto Found;
-                }
-            }
-
-            DWMBG_Restart:
-            foreach (string argument in new string[] { "runhost", " runhost" })
-            {
-                var dwmbg = new Process();
-                dwmbg.StartInfo.FileName = DWMBGApp;
-                dwmbg.StartInfo.Arguments = argument;
-                dwmbg.StartInfo.Verb = "runas";
-                dwmbg.Start();
-                System.Threading.Thread.Sleep(500);
-                dwmbg.Dispose();
-            }
-
-            for (int i = 0; i < 4; i++)
-            {
-                System.Threading.Thread.Sleep(100);
-                RefreshDWM();
-            }
+            RestartDWMBG();
         }
     }
 }

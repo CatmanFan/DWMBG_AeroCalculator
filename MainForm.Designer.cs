@@ -37,6 +37,7 @@ namespace DWMBG_AeroCalculator
             this.WriteToConfig = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.RestartDWMBG = new System.Windows.Forms.Button();
             this.RefreshSIB = new System.Windows.Forms.CheckBox();
             this.RefreshDWM = new System.Windows.Forms.Button();
             this.KillDWM = new System.Windows.Forms.Button();
@@ -88,7 +89,7 @@ namespace DWMBG_AeroCalculator
             // 
             // WriteToConfig
             // 
-            this.WriteToConfig.Location = new System.Drawing.Point(12, 8);
+            this.WriteToConfig.Location = new System.Drawing.Point(9, 11);
             this.WriteToConfig.Name = "WriteToConfig";
             this.WriteToConfig.Size = new System.Drawing.Size(122, 48);
             this.WriteToConfig.TabIndex = 3;
@@ -106,6 +107,7 @@ namespace DWMBG_AeroCalculator
             // panel1
             // 
             this.panel1.BackColor = System.Drawing.SystemColors.Control;
+            this.panel1.Controls.Add(this.RestartDWMBG);
             this.panel1.Controls.Add(this.RefreshSIB);
             this.panel1.Controls.Add(this.RefreshDWM);
             this.panel1.Controls.Add(this.KillDWM);
@@ -114,13 +116,25 @@ namespace DWMBG_AeroCalculator
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(0, 107);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(484, 85);
+            this.panel1.Size = new System.Drawing.Size(484, 90);
             this.panel1.TabIndex = 5;
+            // 
+            // RestartDWMBG
+            // 
+            this.RestartDWMBG.Location = new System.Drawing.Point(353, 58);
+            this.RestartDWMBG.Name = "RestartDWMBG";
+            this.RestartDWMBG.Size = new System.Drawing.Size(122, 23);
+            this.RestartDWMBG.TabIndex = 12;
+            this.RestartDWMBG.Text = "Restart DWMBG";
+            this.toolTip.SetToolTip(this.RestartDWMBG, "Restarts DWMBlurGlass as well as any Windhawk mod enabled which modifies\r\nthe win" +
+        "dow titlebar button sizes. This can be useful if DWM had crashed\r\nunexpectedly.");
+            this.RestartDWMBG.UseVisualStyleBackColor = true;
+            this.RestartDWMBG.Click += new System.EventHandler(this.RestartDWMBG_Click);
             // 
             // RefreshSIB
             // 
             this.RefreshSIB.AutoSize = true;
-            this.RefreshSIB.Location = new System.Drawing.Point(12, 60);
+            this.RefreshSIB.Location = new System.Drawing.Point(9, 63);
             this.RefreshSIB.Name = "RefreshSIB";
             this.RefreshSIB.Size = new System.Drawing.Size(190, 17);
             this.RefreshSIB.TabIndex = 11;
@@ -130,7 +144,7 @@ namespace DWMBG_AeroCalculator
             // 
             // RefreshDWM
             // 
-            this.RefreshDWM.Location = new System.Drawing.Point(350, 33);
+            this.RefreshDWM.Location = new System.Drawing.Point(353, 33);
             this.RefreshDWM.Name = "RefreshDWM";
             this.RefreshDWM.Size = new System.Drawing.Size(122, 23);
             this.RefreshDWM.TabIndex = 10;
@@ -140,7 +154,7 @@ namespace DWMBG_AeroCalculator
             // 
             // KillDWM
             // 
-            this.KillDWM.Location = new System.Drawing.Point(350, 8);
+            this.KillDWM.Location = new System.Drawing.Point(353, 8);
             this.KillDWM.Name = "KillDWM";
             this.KillDWM.Size = new System.Drawing.Size(122, 23);
             this.KillDWM.TabIndex = 9;
@@ -150,7 +164,7 @@ namespace DWMBG_AeroCalculator
             // 
             // WarningIcon
             // 
-            this.WarningIcon.Location = new System.Drawing.Point(326, 9);
+            this.WarningIcon.Location = new System.Drawing.Point(329, 9);
             this.WarningIcon.Name = "WarningIcon";
             this.WarningIcon.Size = new System.Drawing.Size(20, 20);
             this.WarningIcon.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
@@ -220,7 +234,7 @@ namespace DWMBG_AeroCalculator
             this.AutoScaleDimensions = new System.Drawing.SizeF(96F, 96F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Dpi;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(484, 192);
+            this.ClientSize = new System.Drawing.Size(484, 197);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
@@ -265,6 +279,7 @@ namespace DWMBG_AeroCalculator
         private System.Windows.Forms.Button KillDWM;
         private System.Windows.Forms.Button RefreshDWM;
         private System.Windows.Forms.CheckBox RefreshSIB;
+        private System.Windows.Forms.Button RestartDWMBG;
     }
 }
 

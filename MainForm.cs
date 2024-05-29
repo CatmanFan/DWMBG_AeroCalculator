@@ -28,11 +28,13 @@ namespace DWMBG_AeroCalculator
             SetValues();
 
             WarningIcon.Image = new Icon(SystemIcons.Warning, 16, 16).ToBitmap();
-            toolTip.SetToolTip(WarningIcon, "By killing DWM, the following will also automatically be done by this program:\n" +
-                                            "• Restarting DWMBlurGlass.\n" +
-                                            "• Disabling and re-enabling of affected Windhawk mod(s) which modify window caption" +
-                                            "\n   buttons (these stop working when DWM is restarted).\n\n" +
-                                            "Some affected applications may need to be restarted manually.");
+            string warning = "By killing DWM, the following will also automatically be done by this program:\n" +
+                             "• Restarting DWMBlurGlass.\n" +
+                             "• Disabling and re-enabling of affected Windhawk mod(s) which modify window caption" +
+                             "\n   buttons (these stop working when DWM is restarted).\n\n" +
+                             "Some affected applications may need to be restarted manually.";
+            toolTip.SetToolTip(WarningIcon, warning);
+            toolTip.SetToolTip(KillDWM, warning);
         }
 
         private void trackBar1_Scroll(object sender, EventArgs e) => SetValues();
@@ -45,7 +47,7 @@ namespace DWMBG_AeroCalculator
             blur = t < 102 ? -0.526316 * t + 103.684211 : t < 188 ? -0.255814 * t + 76.093023 : t < 189 ? 28 : -0.535714 * t + 131.25;
             SetText();
 
-            KillDWM.Enabled = RefreshDWM.Enabled = Properties.Settings.Default.Opacity == trackBar1.Value;
+            WarningIcon.Visible = RestartDWMBG.Enabled = KillDWM.Enabled = RefreshDWM.Enabled = Properties.Settings.Default.Opacity == trackBar1.Value;
         }
 
         private bool CheckValidity(string path)
@@ -115,7 +117,7 @@ namespace DWMBG_AeroCalculator
                 Properties.Settings.Default.Opacity = trackBar1.Value;
                 Properties.Settings.Default.Save();
 
-                KillDWM.Enabled = RefreshDWM.Enabled = true;
+                WarningIcon.Visible = RestartDWMBG.Enabled = KillDWM.Enabled = RefreshDWM.Enabled = true;
             }
         }
 
@@ -126,6 +128,7 @@ namespace DWMBG_AeroCalculator
 
         private void KillDWM_Click(object sender, EventArgs e) { Utils.KillDWM(); }
         private void RefreshDWM_Click(object sender, EventArgs e) { Utils.RefreshDWM(); }
+        private void RestartDWMBG_Click(object sender, EventArgs e) { Utils.RestartDWMBG(); }
         private void RefreshSIB_CheckedChanged(object sender, EventArgs e)
         {
             Properties.Settings.Default.SIB = RefreshSIB.Checked;
