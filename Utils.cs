@@ -75,7 +75,7 @@ namespace DWMBG_AeroCalculator
             }
         }
 
-        private static bool RestartWindhawkMods()
+        private static void RestartWindhawkMods()
         {
             string windhawk = "SOFTWARE\\Windhawk\\Engine\\Mods\\";
             string[] mods = new string[]
@@ -103,7 +103,7 @@ namespace DWMBG_AeroCalculator
                 regKey.SetValue("Disabled", 1, RegistryValueKind.DWord);
                 System.Threading.Thread.Sleep(400);
                 regKey.SetValue("Disabled", 0, RegistryValueKind.DWord);
-                return true;
+                goto End;
 
                 Search:
                 using (RegistryKey hklm = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, RegistryView.Registry64))
@@ -119,7 +119,9 @@ namespace DWMBG_AeroCalculator
                 }
             }
 
-            return false;
+            End:
+            foreach (Process proc in Process.GetProcessesByName("VSCodium"))
+                proc.Kill();
         }
 
         public static void RefreshSIB(double afterglow)
