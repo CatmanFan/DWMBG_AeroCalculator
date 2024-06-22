@@ -42,6 +42,7 @@ namespace DWMBG_AeroCalculator
         private void SetValues()
         {
             float t = 26 + (217 * (trackBar1.Value / (float)trackBar1.Maximum));
+            (primary, secondary, blur) = Utils.CalculateAeroIntensity(t);
             
             SetText();
 

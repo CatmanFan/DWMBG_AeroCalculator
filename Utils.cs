@@ -157,19 +157,19 @@ namespace DWMBG_AeroCalculator
             return valid;
         }
 
-        public static (double primary, double secondary, double blur) CalculateAeroIntensity(int t)
+        public static (double primary, double secondary, double blur) CalculateAeroIntensity(double t)
         {
-            var primary = t < 103 ? 5 : t < 188 ? 0.776471 * t - 74.976471 : t < 189 ? 71 : 0.535714 * t - 31.25;
-            var secondary = t < 102 ? 0.526316 * t - 8.684211 : t < 189 ? -0.517241 * t + 97.758621 : 0;
-            var blur = t < 102 ? -0.526316 * t + 103.684211 : t < 188 ? -0.255814 * t + 76.093023 : t < 189 ? 28 : -0.535714 * t + 131.25;
+            var primary = t < 103d ? 5 : t < 188d ? 0.776471d * t - 74.976471d : t < 189d ? 71 : 0.535714d * t - 31.25d;
+            var secondary = t < 102d ? 0.526316d * t - 8.684211d : t < 189d ? -0.517241d * t + 97.758621d : 0d;
+            var blur = t < 102d ? -0.526316d * t + 103.684211d : t < 188d ? -0.255814d * t + 76.093023d : t < 189d ? 28d : -0.535714d * t + 131.25d;
             return (primary, secondary, blur);
         }
 
         private static string toConfigData(double input) => (Convert.ToDecimal(input).ToString("0.000") + "000").Replace(',', '.').Replace(' ', '.');
 
-        public static bool ChangeAeroIntensity(int value)
+        public static bool ChangeAeroIntensity(double value)
         {
-            (double primary, double secondary, double blur) = CalculateAeroIntensity(value);
+            (double primary, double secondary, double blur) = CalculateAeroIntensity(Convert.ToDouble(value));
             return ChangeAeroIntensity(primary, secondary, blur);
         }
 
