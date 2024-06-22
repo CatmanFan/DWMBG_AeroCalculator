@@ -77,7 +77,7 @@ namespace DWMBG_AeroCalculator
                 Properties.Settings.Default.Save();
             }
 
-            if (!IsConsole || Properties.Settings.Default.GUI)
+            if (!IsConsole || (Properties.Settings.Default.GUI && args.Length == 0))
             {
                 GUI();
             }
