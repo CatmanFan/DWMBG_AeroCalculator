@@ -49,6 +49,8 @@ namespace DWMBG_AeroCalculator
             this.openDwmBgMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openAppMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.separator = new System.Windows.Forms.ToolStripSeparator();
+            this.restartAsConsoleApplicationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitAppMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar1)).BeginInit();
             this.panel1.SuspendLayout();
@@ -99,10 +101,9 @@ namespace DWMBG_AeroCalculator
             // 
             // openFileDialog
             // 
-            this.openFileDialog.FileName = "openFileDialog";
             this.openFileDialog.Filter = "INI files|*.ini|All files|*.*";
             this.openFileDialog.SupportMultiDottedExtensions = true;
-            this.openFileDialog.Title = "Select a valid DWMBG configuration file...";
+            this.openFileDialog.Title = "Select a valid DWMBlurGlass configuration file...";
             // 
             // panel1
             // 
@@ -199,9 +200,11 @@ namespace DWMBG_AeroCalculator
             this.openDwmBgMenuItem,
             this.openAppMenuItem,
             this.separator,
+            this.restartAsConsoleApplicationToolStripMenuItem,
+            this.toolStripSeparator1,
             this.exitAppMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(235, 76);
+            this.contextMenuStrip.Size = new System.Drawing.Size(235, 104);
             // 
             // openDwmBgMenuItem
             // 
@@ -221,6 +224,18 @@ namespace DWMBG_AeroCalculator
             // 
             this.separator.Name = "separator";
             this.separator.Size = new System.Drawing.Size(231, 6);
+            // 
+            // restartAsConsoleApplicationToolStripMenuItem
+            // 
+            this.restartAsConsoleApplicationToolStripMenuItem.Name = "restartAsConsoleApplicationToolStripMenuItem";
+            this.restartAsConsoleApplicationToolStripMenuItem.Size = new System.Drawing.Size(234, 22);
+            this.restartAsConsoleApplicationToolStripMenuItem.Text = "Restart as console application";
+            this.restartAsConsoleApplicationToolStripMenuItem.Click += new System.EventHandler(this.restartAsConsoleApplicationToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(231, 6);
             // 
             // exitAppMenuItem
             // 
@@ -280,6 +295,8 @@ namespace DWMBG_AeroCalculator
         private System.Windows.Forms.Button RefreshDWM;
         private System.Windows.Forms.CheckBox RefreshSIB;
         private System.Windows.Forms.Button RestartDWMBG;
+        private System.Windows.Forms.ToolStripMenuItem restartAsConsoleApplicationToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
     }
 }
 

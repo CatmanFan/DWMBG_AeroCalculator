@@ -58,5 +58,17 @@ namespace DWMBG_AeroCalculator.Properties {
                 this["SIB"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool GUI {
+            get {
+                return ((bool)(this["GUI"]));
+            }
+            set {
+                this["GUI"] = value;
+            }
+        }
     }
 }

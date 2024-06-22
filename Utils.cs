@@ -138,6 +138,70 @@ namespace DWMBG_AeroCalculator
             }
         }
 
+        public static bool CheckValidity(string path)
+        {
+            if (!File.Exists(path)) return false;
+
+            bool valid = false;
+
+            foreach (string line in File.ReadAllLines(Path.Combine(path)))
+            {
+                if (line.Contains("aeroColorBalance") || line.Contains("aeroAfterglowBalance") || line.Contains("aeroBlurBalance"))
+                {
+                    valid = true;
+                    Properties.Settings.Default.ConfigFile = path;
+                    Properties.Settings.Default.Save();
+                }
+            }
+
+            return valid;
+        }
+
+        public static (double primary, double secondary, double blur) CalculateAeroIntensity(int t)
+        {
+            var primary = t < 103 ? 5 : t < 188 ? 0.776471 * t - 74.976471 : t < 189 ? 71 : 0.535714 * t - 31.25;
+            var secondary = t < 102 ? 0.526316 * t - 8.684211 : t < 189 ? -0.517241 * t + 97.758621 : 0;
+            var blur = t < 102 ? -0.526316 * t + 103.684211 : t < 188 ? -0.255814 * t + 76.093023 : t < 189 ? 28 : -0.535714 * t + 131.25;
+            return (primary, secondary, blur);
+        }
+
+        private static string toConfigData(double input) => (Convert.ToDecimal(input).ToString("0.000") + "000").Replace(',', '.').Replace(' ', '.');
+
+        public static bool ChangeAeroIntensity(int value)
+        {
+            (double primary, double secondary, double blur) = CalculateAeroIntensity(value);
+            return ChangeAeroIntensity(primary, secondary, blur);
+        }
+
+        public static bool ChangeAeroIntensity(double primary, double secondary, double blur)
+        {
+            // Write to files
+            // *************
+            string[] newConfig = File.ReadAllLines(Properties.Settings.Default.ConfigFile);
+            int modified = 0;
+
+            for (int i = 0; i < newConfig.Length; i++)
+            {
+                if (newConfig[i].StartsWith("aeroColorBalance")) { newConfig[i] = $"aeroColorBalance={toConfigData(primary / 100)}"; modified++; }
+                else if (newConfig[i].StartsWith("aeroAfterglowBalance")) { newConfig[i] = $"aeroAfterglowBalance={toConfigData(secondary / 100)}"; modified++; }
+                else if (newConfig[i].StartsWith("aeroBlurBalance")) { newConfig[i] = $"aeroBlurBalance={toConfigData(blur / 100)}"; modified++; }
+            }
+
+            if (modified < 3)
+            {
+                return false;
+            }
+
+            else
+            {
+                using (StreamWriter sw = new StreamWriter(Properties.Settings.Default.ConfigFile))
+                    foreach (string item in newConfig)
+                        sw.WriteLine(item);
+                if (Properties.Settings.Default.SIB) RefreshSIB(secondary);
+                return true;
+            }
+        }
+
         public static void RefreshDWM()
         {
             foreach (Process proc in Process.GetProcessesByName("dwmblurglass"))
