@@ -46,7 +46,7 @@ namespace DWMBG_AeroCalculator
             
             SetText();
 
-            WarningIcon.Visible = RestartDWMBG.Enabled = KillDWM.Enabled = RefreshDWM.Enabled = Properties.Settings.Default.Opacity == trackBar1.Value;
+            WarningIcon.Visible = RestartDWMBG.Enabled = KillDWM.Enabled = RefreshDWM.Enabled = Utils.DWMBGApp == null ? false : Properties.Settings.Default.Opacity == trackBar1.Value;
         }
 
         private string ToString(double input) => Convert.ToDecimal(input).ToString("0.###").Replace(',', '.').Replace(' ', '.');
@@ -57,13 +57,19 @@ namespace DWMBG_AeroCalculator
         {
             if (!Utils.CheckValidity(Properties.Settings.Default.ConfigFile))
             {
-                if (openFileDialog.ShowDialog() == DialogResult.OK)
+                using (var openFileDialog = new OpenFileDialog() { Filter = "INI files|*.ini|All files|*.*", SupportMultiDottedExtensions = true, Title = "Select a valid DWMBlurGlass configuration file..." })
                 {
-                    if (!Utils.CheckValidity(openFileDialog.FileName))
+                    if (openFileDialog.ShowDialog() == DialogResult.OK)
                     {
-                        MessageBox.Show("Not a valid configuration file!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                        return;
+                        if (!Utils.CheckValidity(openFileDialog.FileName))
+                        {
+                            MessageBox.Show("Not a valid configuration file!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                            return;
+                        }
+                        else
+                            WarningIcon.Visible = RestartDWMBG.Enabled = KillDWM.Enabled = RefreshDWM.Enabled = Properties.Settings.Default.Opacity == trackBar1.Value;
                     }
+                    else return;
                 }
             }
 

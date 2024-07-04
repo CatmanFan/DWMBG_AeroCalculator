@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace DWMBG_AeroCalculator
 {
@@ -27,7 +27,23 @@ namespace DWMBG_AeroCalculator
         [DllImport("user32.dll")]
         public static extern int SetForegroundWindow(IntPtr hWnd);
 
-        private static string DWMBGApp { get => Path.GetDirectoryName(Properties.Settings.Default.ConfigFile).Replace("\\data", "\\DWMBlurGlass.exe"); }
+        public static string DWMBGApp
+        {
+            get
+            {
+                try
+                {
+                    return Path.GetDirectoryName(Properties.Settings.Default.ConfigFile).Replace("\\data", "\\DWMBlurGlass.exe");
+                }
+                catch
+                {
+                    Properties.Settings.Default.ConfigFile = null;
+                    Properties.Settings.Default.Save();
+                    // MessageBox.Show("DWMBlurGlass configuration path has not been set. Please click \"Write to config\" and search for the \"config.ini\" file in the DWMBG installation directory, then try again.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return null;
+                }
+            }
+        }
 
         public static void OpenDWMBG()
         {
@@ -40,6 +56,8 @@ namespace DWMBG_AeroCalculator
                 }
             }
 
+            if (DWMBGApp == null) return;
+
             var dwmbg = new Process();
             dwmbg.StartInfo.FileName = DWMBGApp;
             dwmbg.Start();
@@ -47,6 +65,8 @@ namespace DWMBG_AeroCalculator
 
         public static void RestartDWMBG()
         {
+            if (DWMBGApp == null) return;
+
             foreach (Process proc in Process.GetProcessesByName("dwmblurglass"))
             {
                 proc.Kill();
@@ -77,6 +97,8 @@ namespace DWMBG_AeroCalculator
 
         private static void RestartWindhawkMods()
         {
+            if (DWMBGApp == null) return;
+
             string windhawk = "SOFTWARE\\Windhawk\\Engine\\Mods\\";
             string[] mods = new string[]
             {
@@ -204,6 +226,8 @@ namespace DWMBG_AeroCalculator
 
         public static void RefreshDWM()
         {
+            if (DWMBGApp == null) return;
+
             foreach (Process proc in Process.GetProcessesByName("dwmblurglass"))
                 proc.Kill();
 
@@ -222,6 +246,8 @@ namespace DWMBG_AeroCalculator
 
         public static void KillDWM()
         {
+            if (DWMBGApp == null) return;
+
             foreach (Process proc in Process.GetProcessesByName("dwm"))
                 proc.Kill();
 

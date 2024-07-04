@@ -35,7 +35,6 @@ namespace DWMBG_AeroCalculator
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.WriteToConfig = new System.Windows.Forms.Button();
-            this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.panel1 = new System.Windows.Forms.Panel();
             this.RestartDWMBG = new System.Windows.Forms.Button();
             this.RefreshSIB = new System.Windows.Forms.CheckBox();
@@ -98,12 +97,6 @@ namespace DWMBG_AeroCalculator
             this.WriteToConfig.Text = "Write to config";
             this.WriteToConfig.UseVisualStyleBackColor = true;
             this.WriteToConfig.Click += new System.EventHandler(this.WriteToConfig_Click);
-            // 
-            // openFileDialog
-            // 
-            this.openFileDialog.Filter = "INI files|*.ini|All files|*.*";
-            this.openFileDialog.SupportMultiDottedExtensions = true;
-            this.openFileDialog.Title = "Select a valid DWMBlurGlass configuration file...";
             // 
             // panel1
             // 
@@ -280,7 +273,6 @@ namespace DWMBG_AeroCalculator
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button WriteToConfig;
-        private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.PictureBox WarningIcon;
         private System.Windows.Forms.Panel panel2;
