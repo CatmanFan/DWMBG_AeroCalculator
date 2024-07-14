@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DWMBG_AeroCalculator.Properties {
+namespace AeroIntensityCalculator.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
@@ -20,30 +20,6 @@ namespace DWMBG_AeroCalculator.Properties {
         public static Settings Default {
             get {
                 return defaultInstance;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("0")]
-        public int Opacity {
-            get {
-                return ((int)(this["Opacity"]));
-            }
-            set {
-                this["Opacity"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
-        public string ConfigFile {
-            get {
-                return ((string)(this["ConfigFile"]));
-            }
-            set {
-                this["ConfigFile"] = value;
             }
         }
         
@@ -61,13 +37,25 @@ namespace DWMBG_AeroCalculator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("True")]
-        public bool GUI {
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Opacity {
             get {
-                return ((bool)(this["GUI"]));
+                return ((int)(this["Opacity"]));
             }
             set {
-                this["GUI"] = value;
+                this["Opacity"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool AutoRestartDWM {
+            get {
+                return ((bool)(this["AutoRestartDWM"]));
+            }
+            set {
+                this["AutoRestartDWM"] = value;
             }
         }
     }
