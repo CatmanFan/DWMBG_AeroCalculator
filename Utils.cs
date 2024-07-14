@@ -107,13 +107,7 @@ namespace AeroIntensityCalculator
             if (Process.GetProcessesByName("dwmblurglass").Length == 0) goto Start;
 
             End:
-            RestartWindhawkMods();
-            
-            for (int i = 0; i < 2; i++)
-            {
-                System.Threading.Thread.Sleep(200);
-                RefreshDWM();
-            }
+            restartMods();
         }
 
         public static void RestartOpenGlass()
@@ -122,7 +116,19 @@ namespace AeroIntensityCalculator
             System.Threading.Thread.Sleep(800);
             ToggleDWMTask(1, true);
             System.Threading.Thread.Sleep(800);
-            RefreshDWM();
+
+            restartMods();
+        }
+
+        private static void restartMods()
+        {
+            RestartWindhawkMods();
+
+            for (int i = 0; i < 2; i++)
+            {
+                System.Threading.Thread.Sleep(200);
+                RefreshDWM();
+            }
         }
 
         public static void RefreshDWM()
@@ -311,6 +317,16 @@ namespace AeroIntensityCalculator
             {
                 using (var reg = Registry.CurrentUser.OpenSubKey("SOFTWARE\\Microsoft\\Windows\\DWM", true))
                 {
+                    // OpenGlass settings:
+
+                    // ColorizationGlassReflectionParallaxIntensity - Controls movement of reflection texture when dragging window
+                    // ColorizationGlassReflectionIntensity         - Opacity of reflection texture
+                    // GlassCrossFadeTime                           - Transition duration (millisecs)
+                    // BlurDeviation                                - Controls blur radius (0 = none)
+                    // RoundRectRadius                              - Controls radius of window effect
+                    // GlassOverrideBorder                          - Controls whether window effect renders to borders
+                    // Composition                                  - 1 = Aero, 2 = Acrylic, 3 = Mica, 4 = Solid
+
                     reg.SetValue("ColorizationColorBalanceOverride", Convert.ToUInt32(Math.Round(primary)), RegistryValueKind.DWord);
                     reg.SetValue("ColorizationAfterglowBalanceOverride", Convert.ToUInt32(Math.Round(secondary)), RegistryValueKind.DWord);
                     reg.SetValue("GlassOpacity", Convert.ToUInt32(Math.Round(blur)), RegistryValueKind.DWord);
